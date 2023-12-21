@@ -1,0 +1,10 @@
+ffmpeg -i input1.mp4 -i input2.mp4 -i input3.mp4 -i input4.mp4 -map 0 -map 1 -map 2 -map 3 -c copy output.mp4
+
+
+ffmpeg -i input1.mp4 -i input2.mp4 -i input3.mp4 -i input4.mp4 -map 0:v:0 -map 1:a:1 -map 2:s:0 -map 3:v:0 -c copy output.mp4
+
+
+ffmpeg -i input1.mp4 -i input2.mp4 -i input3.mp4 -i input4.mp4 -filter_complex "[0:a][1:a][2:a][3:a]amix=inputs=4[aout]" -map "[aout]" -c:a aac -b:a 256k output.mp4
+
+
+ffmpeg -i input1.mp4 -i input2.mp4 -i input3.mp4 -i input4.mp4 -filter_complex "[0:v][1:v][2:v][3:v]concat=n=4:v=1:a=0[vout];[0:a][1:a][2:a][3:a]amix=inputs=4[aout]" -map "[vout]" -map "[aout]" -c:v libx264 -c:a aac -b:a 256k output.mp4
